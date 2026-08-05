@@ -5,11 +5,11 @@ import { Factory, Shield, Award, Microscope, Settings, Leaf } from 'lucide-react
 export const metadata: Metadata = {
   title: 'About Us | label4security',
   description:
-    'Learn about label4security — our manufacturing philosophy, quality commitment, and why precision in authentication labeling matters for manufacturers across India.',,
+    'Learn about label4security — our manufacturing philosophy, quality commitment, and why precision in authentication labeling matters for manufacturers across India.',
 }
 
 const timeline = [
-  { year: '2016', title: 'Founded', desc: 'label4security established with a vision to bring precision authentication labeling to Indian manufacturers.' },,
+  { year: '2016', title: 'Founded', desc: 'label4security established with a vision to bring precision authentication labeling to Indian manufacturers.' },
   { year: '2018', title: 'Hologram Division', desc: 'Launched dedicated security hologram manufacturing with advanced holographic mastering equipment.' },
   { year: '2020', title: 'Dome Labels', desc: 'Expanded into 3D dome label production with specialized epoxy dispensing technology.' },
   { year: '2022', title: 'Industrial Scale', desc: 'Scaled manufacturing capacity for industrial labels and high-volume shrink sleeve production.' },

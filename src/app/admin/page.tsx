@@ -1,24 +1,12 @@
-import prisma from "@/lib/prisma";
 import Link from "next/link";
 import { FileText, Plus, CheckCircle, Clock, ExternalLink } from "lucide-react";
+import { getAllPages, countPages } from "@/lib/store";
 
 export const dynamic = 'force-dynamic';
 
-export default async function AdminDashboard() {
-  const totalPages = await prisma.authenticationPage.count();
-  const recentPages = await prisma.authenticationPage.findMany({
-    take: 5,
-    select: {
-      id: true,
-      uuid: true,
-      companyName: true,
-      productName: true,
-      productId: true,
-      verificationStatus: true,
-      createdAt: true,
-    },
-    orderBy: { createdAt: "desc" },
-  });
+export default function AdminDashboard() {
+  const totalPages = countPages();
+  const recentPages = getAllPages().slice(0, 5);
 
   return (
     <div className="max-w-6xl mx-auto space-y-8">
@@ -47,7 +35,7 @@ export default async function AdminDashboard() {
             <p className="text-3xl font-bold text-white">{totalPages}</p>
           </div>
         </div>
-        
+
         <div className="bg-slate-900/90 p-6 rounded-2xl border border-slate-800 flex items-center shadow-lg">
           <div className="p-4 bg-emerald-500/10 rounded-xl">
             <CheckCircle className="h-8 w-8 text-emerald-400" />
@@ -76,7 +64,7 @@ export default async function AdminDashboard() {
         <div className="px-6 py-5 border-b border-slate-800">
           <h3 className="text-lg font-semibold text-white">Recently Created Pages</h3>
         </div>
-        
+
         {recentPages.length === 0 ? (
           <div className="p-10 text-center">
             <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-slate-800 mb-4">
@@ -96,11 +84,11 @@ export default async function AdminDashboard() {
             <table className="min-w-full divide-y divide-slate-800">
               <thead className="bg-slate-950/60">
                 <tr>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">Product</th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">Company</th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">Status</th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">Created</th>
-                  <th scope="col" className="relative px-6 py-3"><span className="sr-only">Actions</span></th>
+                  <th className="px-6 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">Product</th>
+                  <th className="px-6 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">Company</th>
+                  <th className="px-6 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">Status</th>
+                  <th className="px-6 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">Created</th>
+                  <th className="px-6 py-3 text-right text-xs font-semibold text-slate-400 uppercase tracking-wider">Actions</th>
                 </tr>
               </thead>
               <tbody className="bg-slate-900/50 divide-y divide-slate-800/60">
@@ -112,12 +100,12 @@ export default async function AdminDashboard() {
                         <span className="text-xs text-slate-400">ID: {page.productId}</span>
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-300">
-                      {page.companyName}
-                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-300">{page.companyName}</td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                        page.verificationStatus === 'Verified' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
+                        page.verificationStatus === 'Verified'
+                          ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+                          : 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
                       }`}>
                         {page.verificationStatus}
                       </span>
@@ -126,9 +114,7 @@ export default async function AdminDashboard() {
                       {new Date(page.createdAt).toLocaleDateString()}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <Link href={`/admin/pages/${page.id}/edit`} className="text-accent hover:text-accent/80 mr-4">
-                        Edit
-                      </Link>
+                      <Link href={`/admin/pages/${page.id}/edit`} className="text-accent hover:text-accent/80 mr-4">Edit</Link>
                       <Link href={`/verify/${page.uuid}`} target="_blank" className="text-slate-400 hover:text-white inline-flex items-center gap-1">
                         View <ExternalLink className="w-3 h-3" />
                       </Link>

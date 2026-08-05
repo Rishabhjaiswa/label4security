@@ -1,38 +1,12 @@
-import prisma from "@/lib/prisma";
 import Link from "next/link";
-import { Plus, Search, ExternalLink } from "lucide-react";
+import { Plus, Search, ExternalLink, FileText } from "lucide-react";
+import { getAllPages } from "@/lib/store";
 import DeletePageButton from "@/components/DeletePageButton";
 
 export const dynamic = 'force-dynamic';
 
-export default async function PagesList({
-  searchParams,
-}: {
-  searchParams: Promise<{ q?: string }>;
-}) {
-  const resolvedSearchParams = await searchParams;
-  const query = resolvedSearchParams?.q || "";
-
-  const pages = await prisma.authenticationPage.findMany({
-    where: {
-      OR: [
-        { productName: { contains: query, mode: "insensitive" } },
-        { companyName: { contains: query, mode: "insensitive" } },
-        { productId: { contains: query, mode: "insensitive" } },
-      ],
-    },
-    select: {
-      id: true,
-      uuid: true,
-      companyName: true,
-      brandName: true,
-      productName: true,
-      productId: true,
-      verificationStatus: true,
-      createdAt: true,
-    },
-    orderBy: { createdAt: "desc" },
-  });
+export default function PagesList() {
+  const pages = getAllPages();
 
   return (
     <div className="max-w-6xl mx-auto space-y-6">
@@ -50,35 +24,17 @@ export default async function PagesList({
         </Link>
       </div>
 
-      {/* Search and Filters */}
-      <div className="bg-slate-900/90 p-4 rounded-2xl border border-slate-800 flex items-center shadow-lg">
-        <div className="relative flex-1 max-w-md">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <Search className="h-5 w-5 text-slate-500" />
-          </div>
-          <form>
-            <input
-              type="text"
-              name="q"
-              defaultValue={query}
-              placeholder="Search by product, company, or ID..."
-              className="block w-full pl-10 pr-3 py-2 border border-slate-700 rounded-lg leading-5 bg-slate-800 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-accent sm:text-sm transition-colors"
-            />
-          </form>
-        </div>
-      </div>
-
       {/* Data Table */}
       <div className="bg-slate-900/90 rounded-2xl border border-slate-800 overflow-hidden shadow-xl">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-slate-800">
             <thead className="bg-slate-950/60">
               <tr>
-                <th scope="col" className="px-6 py-4 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Product Info</th>
-                <th scope="col" className="px-6 py-4 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Company / Brand</th>
-                <th scope="col" className="px-6 py-4 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Status</th>
-                <th scope="col" className="px-6 py-4 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Created</th>
-                <th scope="col" className="px-6 py-4 text-right text-xs font-bold text-slate-400 uppercase tracking-wider">Actions</th>
+                <th className="px-6 py-4 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Product Info</th>
+                <th className="px-6 py-4 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Company / Brand</th>
+                <th className="px-6 py-4 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Status</th>
+                <th className="px-6 py-4 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Created</th>
+                <th className="px-6 py-4 text-right text-xs font-bold text-slate-400 uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
             <tbody className="bg-slate-900/50 divide-y divide-slate-800/60">
@@ -101,7 +57,9 @@ export default async function PagesList({
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${
-                      page.verificationStatus === 'Verified' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
+                      page.verificationStatus === 'Verified'
+                        ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+                        : 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
                     }`}>
                       {page.verificationStatus}
                     </span>
@@ -122,11 +80,14 @@ export default async function PagesList({
                   </td>
                 </tr>
               ))}
-              
               {pages.length === 0 && (
                 <tr>
-                  <td colSpan={5} className="px-6 py-10 text-center text-slate-400">
-                    No authentication pages found.
+                  <td colSpan={5} className="px-6 py-12 text-center">
+                    <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-slate-800 mb-4">
+                      <FileText className="h-8 w-8 text-slate-500" />
+                    </div>
+                    <p className="text-base font-medium text-white mb-1">No authentication pages yet</p>
+                    <p className="text-sm text-slate-400">Create your first QR verification page to get started.</p>
                   </td>
                 </tr>
               )}

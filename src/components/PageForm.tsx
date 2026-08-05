@@ -2,9 +2,23 @@
 
 import { useState } from "react";
 import { createAuthPage, updateAuthPage } from "@/app/actions/pages";
-import { AuthenticationPage } from "@prisma/client";
 import Link from "next/link";
 import { Save, ArrowLeft, Image as ImageIcon } from "lucide-react";
+
+type AuthenticationPage = {
+  id: string;
+  uuid: string;
+  companyName: string;
+  brandName: string;
+  productName: string;
+  productId: string;
+  description: string;
+  verificationStatus: string;
+  logo: string;
+  images: string;
+  createdAt: string | Date;
+  updatedAt: string | Date;
+};
 
 export default function PageForm({ page }: { page?: AuthenticationPage }) {
   const [loading, setLoading] = useState(false);

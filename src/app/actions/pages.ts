@@ -5,14 +5,14 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 export async function createAuthPage(formData: FormData) {
-  const companyName = formData.get("companyName") as string;
-  const brandName = formData.get("brandName") as string;
-  const productName = formData.get("productName") as string;
-  const productId = formData.get("productId") as string;
-  const description = formData.get("description") as string;
-  const verificationStatus = formData.get("verificationStatus") as string;
-  const logo = formData.get("logo") as string;
-  const images = formData.get("images") as string;
+  const companyName = (formData.get("companyName") as string) || "";
+  const brandName = (formData.get("brandName") as string) || "";
+  const productName = (formData.get("productName") as string) || "";
+  const productId = (formData.get("productId") as string) || "";
+  const description = (formData.get("description") as string) || "";
+  const verificationStatus = (formData.get("verificationStatus") as string) || "Verified";
+  const logo = (formData.get("logo") as string) || "";
+  const images = (formData.get("images") as string) || "";
 
   await prisma.authenticationPage.create({
     data: {
@@ -33,14 +33,14 @@ export async function createAuthPage(formData: FormData) {
 }
 
 export async function updateAuthPage(id: string, formData: FormData) {
-  const companyName = formData.get("companyName") as string;
-  const brandName = formData.get("brandName") as string;
-  const productName = formData.get("productName") as string;
-  const productId = formData.get("productId") as string;
-  const description = formData.get("description") as string;
-  const verificationStatus = formData.get("verificationStatus") as string;
-  const logo = formData.get("logo") as string;
-  const images = formData.get("images") as string;
+  const companyName = (formData.get("companyName") as string) || "";
+  const brandName = (formData.get("brandName") as string) || "";
+  const productName = (formData.get("productName") as string) || "";
+  const productId = (formData.get("productId") as string) || "";
+  const description = (formData.get("description") as string) || "";
+  const verificationStatus = (formData.get("verificationStatus") as string) || "Verified";
+  const logo = (formData.get("logo") as string) || "";
+  const images = (formData.get("images") as string) || "";
 
   await prisma.authenticationPage.update({
     where: { id },
@@ -68,4 +68,31 @@ export async function deleteAuthPage(id: string) {
 
   revalidatePath("/admin");
   revalidatePath("/admin/pages");
+}
+
+export async function submitEnquiry(formData: FormData) {
+  const fullName = (formData.get("fullName") as string) || "";
+  const companyName = (formData.get("companyName") as string) || "";
+  const phoneNumber = (formData.get("phoneNumber") as string) || "";
+  const email = (formData.get("email") as string) || "";
+  const category = (formData.get("category") as string) || "";
+  const message = (formData.get("message") as string) || "";
+
+  try {
+    const enquiry = await prisma.enquiry.create({
+      data: {
+        fullName,
+        companyName,
+        phoneNumber,
+        email,
+        category,
+        message,
+      },
+    });
+
+    return { success: true, enquiryId: enquiry.id };
+  } catch (error) {
+    console.error("Failed to save enquiry:", error);
+    return { success: false, error: "Failed to submit enquiry" };
+  }
 }

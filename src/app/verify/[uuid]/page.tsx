@@ -1,15 +1,13 @@
-import prisma from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import { CheckCircle, AlertTriangle, ShieldCheck, Info } from "lucide-react";
 import Link from "next/link";
+import { getPageByUuid } from "@/lib/store";
 
 export const dynamic = 'force-dynamic';
 
 export default async function VerifyPage({ params }: { params: Promise<{ uuid: string }> }) {
   const resolvedParams = await params;
-  const page = await prisma.authenticationPage.findUnique({
-    where: { uuid: resolvedParams.uuid },
-  });
+  const page = getPageByUuid(resolvedParams.uuid);
 
   if (!page) {
     notFound();
@@ -100,7 +98,7 @@ export default async function VerifyPage({ params }: { params: Promise<{ uuid: s
         {/* Footer */}
         <div className="bg-slate-950 p-4 text-center border-t border-slate-800">
           <Link href="/" className="text-xs text-slate-400 hover:text-white font-semibold tracking-wider inline-flex items-center justify-center uppercase transition-colors">
-            <ShieldCheck className="w-3.5 h-3.5 mr-1.5 text-accent" /> Authenticated via label4security
+            <ShieldCheck className="w-3.5 h-3.5 mr-1.5 text-accent" /> Authenticated via Matrix Tags
           </Link>
         </div>
       </div>

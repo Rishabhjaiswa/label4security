@@ -1,13 +1,6 @@
-import { PrismaClient } from "@prisma/client";
+// Prisma has been removed from this project.
+// This stub file exists to prevent import errors.
+// To restore database functionality, reinstall prisma and @prisma/client.
 
-const globalForPrisma = global as unknown as { prisma: PrismaClient };
-
-export const prisma =
-  globalForPrisma.prisma ||
-  new PrismaClient({
-    log: ["error"],
-  });
-
-if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
-
+const prisma = null as any;
 export default prisma;

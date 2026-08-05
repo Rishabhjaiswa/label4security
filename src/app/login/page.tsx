@@ -1,9 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { Lock, Mail, ShieldCheck } from "lucide-react";
+import { Lock, Mail } from "lucide-react";
 import Link from "next/link";
 
 export default function LoginPage() {
@@ -18,35 +17,29 @@ export default function LoginPage() {
     setLoading(true);
     setError("");
 
-    try {
-      const res = await signIn("credentials", {
-        email,
-        password,
-        redirect: false,
-      });
+    // Hardcoded admin credentials
+    const ADMIN_EMAIL = "admin@matrixtags.com";
+    const ADMIN_PASSWORD = "Matrix@2025";
 
-      if (res?.error) {
-        setError("Invalid credentials. Please try again.");
-      } else {
-        router.push("/admin");
-        router.refresh();
-      }
-    } catch (err) {
-      setError("An unexpected error occurred.");
-    } finally {
+    setTimeout(() => {
       setLoading(false);
-    }
+      if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+        router.push("/admin");
+      } else {
+        setError("Invalid credentials. Please try again.");
+      }
+    }, 600);
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#060B12] font-sans p-4 relative overflow-hidden">
-      {/* Background Orbs */}
+      {/* Background Orb */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-96 h-96 bg-accent/10 rounded-full blur-3xl pointer-events-none" />
-      
+
       <div className="max-w-md w-full bg-slate-900/90 backdrop-blur-xl p-8 rounded-3xl shadow-2xl border border-slate-800 relative z-10">
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2 mb-4">
-            <img src="/images/logo.png" alt="label4security" className="h-10 w-auto" />
+            <img src="/images/logo.png" alt="Matrix Tags" className="h-10 w-auto" />
           </Link>
           <h1 className="text-2xl font-extrabold text-white mb-2">Admin Portal</h1>
           <p className="text-slate-400 text-sm">Sign in to manage product verification pages</p>

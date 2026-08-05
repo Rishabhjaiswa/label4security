@@ -6,7 +6,7 @@ import { CTASection } from '@/components/sections/CTASection'
 export const metadata: Metadata = {
   title: 'Products | Security Holograms, Labels & Packaging Solutions',
   description:
-    'Explore label4security complete range of security holograms, authentication labels, shrink sleeves, dome labels, and industrial packaging solutions.',,
+    'Explore label4security complete range of security holograms, authentication labels, shrink sleeves, dome labels, and industrial packaging solutions.',
 }
 
 const products = [
