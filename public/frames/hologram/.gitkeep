@@ -1,0 +1,3 @@
+This placeholder file marks the public/frames/hologram directory.
+Place sequential animation frames here named 0001.jpg, 0002.jpg, etc.
+Run extract-frames.ps1 from the project root to auto-extract from the ZIP file.
