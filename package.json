@@ -9,11 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@prisma/client": "^6.19.3",
     "@radix-ui/react-dialog": "^1.1.4",
     "@radix-ui/react-label": "^2.1.1",
     "@radix-ui/react-navigation-menu": "^1.2.3",
     "@radix-ui/react-select": "^2.1.2",
     "@radix-ui/react-slot": "^1.1.1",
+    "bcryptjs": "^3.0.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "embla-carousel-autoplay": "^8.5.1",
@@ -23,12 +25,14 @@
     "lenis": "^1.1.14",
     "lucide-react": "^0.468.0",
     "next": "latest",
+    "next-auth": "^4.24.14",
     "react": "latest",
     "react-dom": "latest",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
@@ -36,6 +40,7 @@
     "eslint": "^9",
     "eslint-config-next": "latest",
     "postcss": "^8",
+    "prisma": "^6.19.3",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   }

@@ -198,6 +198,17 @@ export function Navbar() {
           {/* Desktop CTA */}
           <div className="hidden lg:flex items-center gap-3">
             <Link
+              href="/login"
+              className={cn(
+                'px-4 py-2 rounded-xl text-xs font-semibold uppercase tracking-wider transition-all duration-300 border',
+                isScrolled
+                  ? 'border-accent/40 text-accent hover:bg-accent/10'
+                  : 'border-white/30 text-white hover:bg-white/10'
+              )}
+            >
+              Verify QR
+            </Link>
+            <Link
               href="/contact"
               className={cn(
                 'px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300',
