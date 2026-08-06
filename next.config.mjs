@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  reactStrictMode: true,
   images: {
     formats: ['image/avif', 'image/webp'],
     remotePatterns: [
@@ -8,6 +9,11 @@ const nextConfig = {
         hostname: 'images.unsplash.com',
       }
     ],
+  },
+
+  // Optimize heavy package imports to reduce memory footprint during startup
+  experimental: {
+    optimizePackageImports: ['lucide-react', 'framer-motion'],
   },
 
   // Cache frame images aggressively in the browser (1 year).
