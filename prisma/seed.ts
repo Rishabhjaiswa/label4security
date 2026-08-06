@@ -6,21 +6,26 @@ const prisma = new PrismaClient()
 async function main() {
   console.log('🌱 Starting database seed...')
 
-  // Seed Admin User
-  const adminEmail = 'admin@label4security.com'
-  const hashedPassword = await bcrypt.hash('AdminPassword123!', 10)
+  // User credentials requested: admin@matrixtags.com / Matrix@2025
+  const hashedPassword = await bcrypt.hash('Matrix@2025', 10)
 
-  const admin = await prisma.user.upsert({
-    where: { email: adminEmail },
-    update: { password: hashedPassword },
-    create: {
-      email: adminEmail,
-      name: 'System Admin',
-      password: hashedPassword,
-    },
-  })
+  const users = [
+    { email: 'admin@matrixtags.com', name: 'Matrix Tags Admin' },
+    { email: 'admin@label4security.com', name: 'label4security Admin' },
+  ]
 
-  console.log(`✅ Admin user seeded: ${admin.email}`)
+  for (const u of users) {
+    const admin = await prisma.user.upsert({
+      where: { email: u.email },
+      update: { password: hashedPassword },
+      create: {
+        email: u.email,
+        name: u.name,
+        password: hashedPassword,
+      },
+    })
+    console.log(`✅ Admin user seeded: ${admin.email}`)
+  }
 
   // Seed Sample Verification Pages
   const samplePages = [
