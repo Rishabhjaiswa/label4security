@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, FileText } from "lucide-react";
+import { LayoutDashboard, FileText, Mail } from "lucide-react";
 
 export function AdminNavLinks() {
   const pathname = usePathname();
@@ -10,6 +10,7 @@ export function AdminNavLinks() {
   const navigation = [
     { name: "Dashboard", href: "/admin", icon: LayoutDashboard },
     { name: "Verification Pages", href: "/admin/pages", icon: FileText },
+    { name: "Client Inquiries", href: "/admin/inquiries", icon: Mail },
   ];
 
   return (

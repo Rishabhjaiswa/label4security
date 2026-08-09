@@ -1,10 +1,6 @@
 import type { Metadata } from 'next'
 import { Inter, Space_Grotesk } from 'next/font/google'
 import './globals.css'
-import { Navbar } from '@/components/layout/Navbar'
-import { Footer } from '@/components/layout/Footer'
-import { SmoothScrollProvider } from '@/components/providers/SmoothScrollProvider'
-import { CallbackButton } from '@/components/ui/CallbackButton'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -116,14 +112,7 @@ export default function RootLayout({
         />
       </head>
       <body className="font-sans antialiased">
-        <SmoothScrollProvider>
-          <Navbar />
-          <main id="main-content" tabIndex={-1}>
-            {children}
-          </main>
-          <Footer />
-          <CallbackButton />
-        </SmoothScrollProvider>
+        {children}
       </body>
     </html>
   )

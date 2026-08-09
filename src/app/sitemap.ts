@@ -1,5 +1,5 @@
 import { MetadataRoute } from 'next'
-import prisma from '@/lib/prisma'
+import { getAllPages } from '@/lib/store'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://label4security.com'
@@ -7,18 +7,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let verificationUrls: MetadataRoute.Sitemap = []
 
   try {
-    if (prisma && prisma.authenticationPage) {
-      const authPages = await prisma.authenticationPage.findMany({
-        select: { uuid: true, updatedAt: true },
-      })
-
-      verificationUrls = authPages.map((page: { uuid: string; updatedAt: Date }) => ({
-        url: `${baseUrl}/verify/${page.uuid}`,
-        lastModified: page.updatedAt,
-        changeFrequency: 'weekly' as const,
-        priority: 0.8,
-      }))
-    }
+    const authPages = await getAllPages();
+    verificationUrls = authPages.map((page) => ({
+      url: `${baseUrl}/verify/${page.uuid}`,
+      lastModified: new Date(page.updatedAt),
+      changeFrequency: 'weekly' as const,
+      priority: 0.8,
+    }))
   } catch (error) {
     console.warn('Sitemap dynamic page fetch skipped during build:', error)
   }

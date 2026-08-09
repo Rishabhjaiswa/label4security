@@ -44,10 +44,18 @@ export default function PageForm({ page }: { page?: AuthenticationPage }) {
         
         try {
           if (page) {
-            await updateAuthPage(page.id, formData);
+            const res = await updateAuthPage(page.id, formData);
+            if (res?.success) {
+              window.location.href = "/admin/pages";
+            }
           } else {
-            await createAuthPage(formData);
+            const res = await createAuthPage(formData);
+            if (res?.success) {
+              window.location.href = "/admin/pages";
+            }
           }
+        } catch (err) {
+          console.error("Action failed", err);
         } finally {
           setLoading(false);
         }

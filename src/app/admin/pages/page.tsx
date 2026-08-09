@@ -2,11 +2,12 @@ import Link from "next/link";
 import { Plus, Search, ExternalLink, FileText } from "lucide-react";
 import { getAllPages } from "@/lib/store";
 import DeletePageButton from "@/components/DeletePageButton";
+import QRCodeModal from "@/components/QRCodeModal";
 
 export const dynamic = 'force-dynamic';
 
-export default function PagesList() {
-  const pages = getAllPages();
+export default async function PagesList() {
+  const pages = await getAllPages();
 
   return (
     <div className="max-w-6xl mx-auto space-y-6">
@@ -69,10 +70,15 @@ export default function PagesList() {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <div className="flex items-center justify-end space-x-3">
-                      <Link href={`/verify/${page.uuid}`} target="_blank" className="text-slate-400 hover:text-white transition-colors" title="View Public QR Page">
-                        <ExternalLink className="h-4 w-4" />
+                      <QRCodeModal 
+                        uuid={page.uuid} 
+                        productName={page.productName} 
+                        brandName={page.brandName} 
+                      />
+                      <Link href={`/verify/${page.uuid}`} target="_blank" className="p-2 text-slate-400 hover:text-white bg-slate-800/80 hover:bg-slate-700/80 rounded-xl transition-all border border-slate-700/50" title="View Public QR Page">
+                        <ExternalLink className="w-4 h-4" />
                       </Link>
-                      <Link href={`/admin/pages/${page.id}/edit`} className="text-accent hover:text-accent/80 bg-accent/10 hover:bg-accent/20 px-3 py-1 rounded-md transition-colors">
+                      <Link href={`/admin/pages/${page.id}/edit`} className="text-accent hover:text-accent/80 bg-accent/10 hover:bg-accent/20 px-3.5 py-2 rounded-xl transition-colors font-semibold text-xs border border-accent/20">
                         Edit
                       </Link>
                       <DeletePageButton id={page.id} />

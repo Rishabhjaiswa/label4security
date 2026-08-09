@@ -1,0 +1,14 @@
+import { pbkdf2Sync, randomBytes } from "crypto";
+
+export function hashPassword(password: string): string {
+  const salt = randomBytes(16).toString("hex");
+  const hash = pbkdf2Sync(password, salt, 1000, 64, "sha512").toString("hex");
+  return `${salt}:${hash}`;
+}
+
+export function verifyPassword(password: string, storedValue: string): boolean {
+  const [salt, originalHash] = storedValue.split(":");
+  if (!salt || !originalHash) return false;
+  const hash = pbkdf2Sync(password, salt, 1000, 64, "sha512").toString("hex");
+  return hash === originalHash;
+}

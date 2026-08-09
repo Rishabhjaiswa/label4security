@@ -6,11 +6,14 @@ const prisma = new PrismaClient()
 async function main() {
   console.log('🌱 Starting database seed...')
 
+  const defaultEmail = process.env.DEFAULT_ADMIN_EMAIL || 'admin@matrixtags.com';
+  const defaultPassword = process.env.DEFAULT_ADMIN_PASSWORD || 'Matrix@2025';
+
   // User credentials requested: admin@matrixtags.com / Matrix@2025
-  const hashedPassword = await bcrypt.hash('Matrix@2025', 10)
+  const hashedPassword = await bcrypt.hash(defaultPassword, 10)
 
   const users = [
-    { email: 'admin@matrixtags.com', name: 'Matrix Tags Admin' },
+    { email: defaultEmail, name: 'Matrix Tags Admin' },
     { email: 'admin@label4security.com', name: 'label4security Admin' },
   ]
 

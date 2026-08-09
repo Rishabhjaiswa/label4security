@@ -2,15 +2,77 @@ import { notFound } from "next/navigation";
 import { CheckCircle, AlertTriangle, ShieldCheck, Info } from "lucide-react";
 import Link from "next/link";
 import { getPageByUuid } from "@/lib/store";
+import { headers } from "next/headers";
+import prisma from "@/lib/prisma";
+import { sendEmail } from "@/lib/mail";
 
 export const dynamic = 'force-dynamic';
 
 export default async function VerifyPage({ params }: { params: Promise<{ uuid: string }> }) {
   const resolvedParams = await params;
-  const page = getPageByUuid(resolvedParams.uuid);
+  const { uuid } = resolvedParams;
+
+  // Retrieve user headers (IP and User-Agent)
+  const headersList = await headers();
+  const userAgent = headersList.get("user-agent") || "Unknown";
+  const ip = headersList.get("x-forwarded-for") || headersList.get("x-real-ip") || "127.0.0.1";
+
+  const page = await getPageByUuid(uuid);
 
   if (!page) {
+    // Send high-priority counterfeit warning email to admin
+    const adminEmail = process.env.DEFAULT_ADMIN_EMAIL || "labelsecurity@gmail.com";
+    const subject = `🚨 SECURITY ALERT: Counterfeit Label Scanned!`;
+    const content = `A scan was detected using an invalid verification ID. This could indicate a counterfeit QR sticker attempt on the market.
+
+Scanned ID (UUID): ${uuid}
+Client IP Address: ${ip}
+Browser User Agent: ${userAgent}
+Scan Time: ${new Date().toLocaleString()}
+
+--
+Matrix Tags Security System Alert`;
+
+    sendEmail({ to: adminEmail, subject, text: content }).catch(err => {
+      console.error("Async counterfeit email warning error:", err);
+    });
+
     notFound();
+  }
+
+  // Create scan log in the database
+  try {
+    await prisma.scanLog.create({
+      data: {
+        pageId: page.id,
+        ipAddress: ip,
+        userAgent: userAgent,
+      }
+    });
+  } catch (logErr) {
+    console.error("Failed to create scan log entry:", logErr);
+  }
+
+  // Send warning email if status is unverified or failed
+  if (page.verificationStatus === "Unverified" || page.verificationStatus === "Failed") {
+    const adminEmail = process.env.DEFAULT_ADMIN_EMAIL || "labelsecurity@gmail.com";
+    const subject = `⚠️ WARNING: Unverified Brand Page Scanned!`;
+    const content = `A scan has occurred for a page flagged as "Unverified" or "Suspicious" in your portal.
+
+Brand: ${page.brandName}
+Product Name: ${page.productName}
+Product ID: ${page.productId}
+Manufacturer: ${page.companyName}
+Client IP: ${ip}
+User Agent: ${userAgent}
+Time: ${new Date().toLocaleString()}
+
+--
+Matrix Tags Security System Alert`;
+
+    sendEmail({ to: adminEmail, subject, text: content }).catch(err => {
+      console.error("Async unverified scan email warning error:", err);
+    });
   }
 
   const isVerified = page.verificationStatus === "Verified";

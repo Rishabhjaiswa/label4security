@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Phone, X, Send } from 'lucide-react'
+import { submitEnquiry } from '@/app/actions/pages'
 
 const productCategories = [
   'Security Holograms',
@@ -17,15 +18,42 @@ const productCategories = [
 export function CallbackButton() {
   const [isOpen, setIsOpen] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const [loading, setLoading] = useState(false)
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    // No backend — just show success state
-    setIsSubmitted(true)
-    setTimeout(() => {
-      setIsSubmitted(false)
-      setIsOpen(false)
-    }, 3000)
+    setLoading(true)
+
+    const formData = new FormData(e.currentTarget)
+    const fullName = (e.currentTarget.querySelector('#callback-name') as HTMLInputElement).value
+    const companyName = (e.currentTarget.querySelector('#callback-company') as HTMLInputElement).value
+    const phoneNumber = (e.currentTarget.querySelector('#callback-phone') as HTMLInputElement).value
+    const email = (e.currentTarget.querySelector('#callback-email') as HTMLInputElement).value
+    const category = (e.currentTarget.querySelector('#callback-category') as HTMLSelectElement).value
+    const message = (e.currentTarget.querySelector('#callback-requirement') as HTMLTextAreaElement).value
+
+    try {
+      const res = await submitEnquiry({
+        fullName,
+        companyName,
+        phoneNumber,
+        email,
+        category,
+        message
+      })
+
+      if (res.success) {
+        setIsSubmitted(true)
+        setTimeout(() => {
+          setIsSubmitted(false)
+          setIsOpen(false)
+        }, 3000)
+      }
+    } catch (err) {
+      console.error(err)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (

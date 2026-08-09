@@ -1,12 +1,14 @@
 import Link from "next/link";
-import { FileText, Plus, CheckCircle, Clock, ExternalLink } from "lucide-react";
-import { getAllPages, countPages } from "@/lib/store";
+import { FileText, Plus, CheckCircle, Mail, ExternalLink } from "lucide-react";
+import { getAllPages, countPages, countEnquiries } from "@/lib/store";
 
 export const dynamic = 'force-dynamic';
 
-export default function AdminDashboard() {
-  const totalPages = countPages();
-  const recentPages = getAllPages().slice(0, 5);
+export default async function AdminDashboard() {
+  const totalPages = await countPages();
+  const totalEnquiries = await countEnquiries();
+  const pages = await getAllPages();
+  const recentPages = pages.slice(0, 5);
 
   return (
     <div className="max-w-6xl mx-auto space-y-8">
@@ -48,15 +50,18 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        <div className="bg-slate-900/90 p-6 rounded-2xl border border-slate-800 flex items-center shadow-lg">
+        <Link 
+          href="/admin/inquiries"
+          className="bg-slate-900/90 p-6 rounded-2xl border border-slate-800 flex items-center shadow-lg hover:border-slate-700 transition-colors"
+        >
           <div className="p-4 bg-amber-500/10 rounded-xl">
-            <Clock className="h-8 w-8 text-amber-400" />
+            <Mail className="h-8 w-8 text-amber-400" />
           </div>
           <div className="ml-5">
-            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Recent Updates</p>
-            <p className="text-3xl font-bold text-white">{recentPages.length}</p>
+            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Enquiries</p>
+            <p className="text-3xl font-bold text-white">{totalEnquiries}</p>
           </div>
-        </div>
+        </Link>
       </div>
 
       {/* Recent Activity Table */}
