@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "cross-env NODE_OPTIONS=--max-old-space-size=512 next dev --port 3001",
     "build": "cross-env NODE_OPTIONS=--max-old-space-size=1024 next build",
-    "start": "cross-env NODE_OPTIONS=--max-old-space-size=128 next start --port 3001",
+    "start": "cross-env NODE_OPTIONS=--max-old-space-size=128 next start",
     "lint": "next lint"
   },
   "dependencies": {
