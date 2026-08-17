@@ -20,8 +20,8 @@ const contactInfo = [
   {
     icon: Mail,
     label: 'Email',
-    value: 'info@matrixtags.com',
-    href: 'mailto:info@matrixtags.com',
+    value: 'labelsecurity@gmail.com',
+    href: 'mailto:labelsecurity@gmail.com',
     desc: 'We respond within 24 hours',
     color: '#F97316',
   },

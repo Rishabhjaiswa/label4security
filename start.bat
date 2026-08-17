@@ -67,6 +67,7 @@ echo.
 :start_prod
 echo Starting server on http://localhost:3001
 set NODE_OPTIONS=--max-old-space-size=128
+set PORT=3001
 call npm run start
 goto end
 

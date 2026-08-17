@@ -44,21 +44,6 @@ export function Footer() {
             <p className="text-white/50 text-sm leading-relaxed mb-6 max-w-xs">
               India&apos;s trusted manufacturer of security holograms, authentication labels, and premium packaging solutions.
             </p>
-            {/* Social Icons */}
-            <div className="flex items-center gap-3">
-              {socialLinks.map(({ href, label, icon: Icon }) => (
-                <a
-                  key={label}
-                  href={href}
-                  className="w-9 h-9 rounded-lg bg-white/5 hover:bg-accent/20 border border-white/10 hover:border-accent/30 flex items-center justify-center text-white/40 hover:text-white transition-all duration-200"
-                  aria-label={label}
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  <Icon className="w-4 h-4" />
-                </a>
-              ))}
-            </div>
           </div>
 
           {/* Products Column */}
@@ -119,12 +104,12 @@ export function Footer() {
               </li>
               <li>
                 <a
-                  href="mailto:info@matrixtags.com"
+                  href="mailto:labelsecurity@gmail.com"
                   className="flex items-start gap-3 text-white/50 hover:text-white transition-colors duration-200"
                   aria-label="Email us"
                 >
                   <Mail className="w-4 h-4 mt-0.5 flex-shrink-0 text-accent" />
-                  <span className="text-sm">info@matrixtags.com</span>
+                  <span className="text-sm">labelsecurity@gmail.com</span>
                 </a>
               </li>
               <li>
