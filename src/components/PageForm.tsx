@@ -24,13 +24,35 @@ export default function PageForm({ page }: { page?: AuthenticationPage }) {
   const [loading, setLoading] = useState(false);
   const [logoPreview, setLogoPreview] = useState(page?.logo || "");
 
-  // Base64 converter for simple logo upload
+  // Base64 converter with client-side image compression to avoid Vercel payload limits
   const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
-      reader.onloadend = () => {
-        setLogoPreview(reader.result as string);
+      reader.onload = (event) => {
+        const img = new window.Image();
+        img.onload = () => {
+          const canvas = document.createElement("canvas");
+          const MAX_WIDTH = 300; // Limit logo width to 300px
+          const scale = MAX_WIDTH / img.width;
+          
+          if (img.width > MAX_WIDTH) {
+            canvas.width = MAX_WIDTH;
+            canvas.height = img.height * scale;
+          } else {
+            canvas.width = img.width;
+            canvas.height = img.height;
+          }
+
+          const ctx = canvas.getContext("2d");
+          if (ctx) {
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            // Compress to JPEG with 0.8 quality (drops size to ~20KB-40KB)
+            const compressedBase64 = canvas.toDataURL("image/jpeg", 0.8);
+            setLogoPreview(compressedBase64);
+          }
+        };
+        img.src = event.target?.result as string;
       };
       reader.readAsDataURL(file);
     }
