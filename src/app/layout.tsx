@@ -86,23 +86,39 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable} scroll-smooth dark`}>
       <head>
-        {/* Schema.org structured data */}
+        {/* Schema.org structured data optimized for Local SEO */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               '@context': 'https://schema.org',
-              '@type': 'Organization',
+              '@type': 'LocalBusiness',
               name: 'label4security',
-              description: "India's trusted manufacturer of security holograms, authentication labels, and packaging solutions",
+              description: "India's trusted manufacturer of security holograms, authentication labels, and packaging solutions. Supplying premium anti-counterfeit tags to Pune, Indore, and across India.",
               url: 'https://label4security.com',
-              logo: 'https://label4security.com/images/logo.png',
+              logo: 'https://label4security.com/images/label4security_logo.jpg',
+              image: 'https://label4security.com/images/label4security_logo.jpg',
               contactPoint: {
                 '@type': 'ContactPoint',
                 contactType: 'customer service',
                 availableLanguage: ['English', 'Hindi'],
               },
-              areaServed: 'IN',
+              areaServed: [
+                {
+                  '@type': 'City',
+                  name: 'Pune',
+                  sameAs: 'https://en.wikipedia.org/wiki/Pune'
+                },
+                {
+                  '@type': 'City',
+                  name: 'Indore',
+                  sameAs: 'https://en.wikipedia.org/wiki/Indore'
+                },
+                {
+                  '@type': 'Country',
+                  name: 'India'
+                }
+              ],
               foundingLocation: {
                 '@type': 'Place',
                 addressCountry: 'IN',
